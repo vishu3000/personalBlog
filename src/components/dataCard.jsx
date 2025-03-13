@@ -1,30 +1,34 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
-const DataCard = () => {
+// ... existing code ...
+const DataCard = (props) => {
+  const { data } = props;
+  const cardLink = `/blogs/${data.id}`;
   return (
-    <div class="w-80 h-[495px] rounded overflow-hidden shadow-lg border-2 m-5">
+    <div class="w-80 h-[495px] rounded overflow-hidden shadow-lg border-2 m-5 flex flex-col">
       <Image
-        src="/pic1.jpeg"
+        src={data.imageUrl}
         width={0}
         height={0}
         sizes="100vw"
-        style={{ width: "100%", height: "auto" }} // optional
+        style={{ width: "100%", height: "200px" }}
         className="max-h-[195px]"
       />
       {/* Write Up Container */}
-      <div className="flex flex-col ">
+      <div className="flex flex-col flex-1">
         {/* Author Details */}
         <div className=" mt-3 px-2 flex items-center justify-center">
           <Image
             src="/profilePlaceHolder.jpeg"
-            width={40}
             height={40}
+            width={40}
             className="rounded-full"
           />
           <div className="flex flex-col mx-4">
-            <span>Admin</span>
-            <span>March 21 2023 . 2 min read</span>
+            <span>{data.author}</span>
+            <span>{data.date} . 2 min read</span>
           </div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -37,16 +41,17 @@ const DataCard = () => {
           </svg>
         </div>
         {/* Write Up */}
-        <div className="flex flex-col my-2 mx-6">
-          <span className="text-3xl font-bold">A year in Color Trend</span>
-          <span>
-            Create a blog post subtitle that summarizes your post in a few
-            short, punchy sentences and entices your audience to continue
-            reading....
-          </span>
-        </div>
-        {/* Commnets and likes */}
-        <div className="flex items-center justify-around pt-2 mt-1 mx-6 border-t-2 font">
+        <Link href={cardLink}>
+          <div className="flex flex-col my-2 mx-6 overflow-hidden hover:text-indigo-900 cursor-pointer">
+            <span className="text-3xl font-bold mb-2 ">{data.title}</span>
+            <span className="overflow-hidden line-clamp-4 ">
+              {data.summary}
+            </span>
+          </div>
+        </Link>
+
+        {/* Comments and likes */}
+        <div className="flex items-center justify-around py-4 mt-auto mx-6 border-t-2">
           <span>0 views</span>
           <span>0 comments</span>
           <div className="flex justify-center items-center">
