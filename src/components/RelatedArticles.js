@@ -3,10 +3,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
-const RelatedArticles = ({ articles }) => {
+const ArticleList = ({ blogHeading, articles }) => {
   return (
-    <div className="my-8 mx-8 sticky top-4">
-      <h2 className="text-2xl font-bold mb-4">Related Articles</h2>
+    <div className="my-8 mx-8 max-h-96 overflow-y-auto p-4 border-2 shadow-lg rounded-lg bg-white">
+      <h2 className="text-2xl font-bold mb-4">{blogHeading}</h2>
       <div className="flex flex-col space-y-4">
         {articles.map((article) => (
           <div
@@ -31,4 +31,4 @@ const RelatedArticles = ({ articles }) => {
   );
 };
 
-export default RelatedArticles;
+export default ArticleList;

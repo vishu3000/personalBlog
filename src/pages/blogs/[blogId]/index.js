@@ -27,7 +27,7 @@ import {
   updateFields,
 } from "@/utils/utils";
 import CommentSection from "@/components/commentSection";
-import RelatedArticles from "@/components/RelatedArticles";
+import ArticleList from "@/components/RelatedArticles";
 
 // Separate components for better organization
 const AuthorInfo = ({ author, date, readTime, authorAvatar }) => (
@@ -217,6 +217,72 @@ const BlogPost = () => {
       summary: "A deep dive into React hooks.",
       readTime: "5 min",
     },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
+    {
+      id: 1,
+      title: "Understanding React Hooks",
+      summary: "A deep dive into React hooks.",
+      readTime: "5 min",
+    },
   ];
 
   if (isLoading) {
@@ -336,7 +402,17 @@ const BlogPost = () => {
         </div>
         {/* Related Articles Section */}
         <div className="md:w-1/4 ">
-          <RelatedArticles articles={relatedArticles} />
+          <div className="flex flex-col sticky top-4">
+            <ArticleList
+              articles={relatedArticles}
+              blogHeading={"Related Blogs"}
+            />
+            <div className="my-4 h-px bg-gray-300" />
+            <ArticleList
+              articles={relatedArticles}
+              blogHeading={"Blogs You Liked.."}
+            />
+          </div>
         </div>
       </div>
     </>
