@@ -25,6 +25,9 @@ const BlogHub = () => {
         date: item.date[0],
         imageUrl: item.imageUrl,
         id: item._id,
+        views: item.views,
+        likes: item.likes,
+        comments: item.comments,
       };
     });
 

@@ -51,7 +51,7 @@ const index = () => {
     formData.append("date", date);
 
     try {
-      const response = await fetch("/api/saveAllData", {
+      const response = await fetch("/api/initialBlog", {
         method: "POST",
         body: formData,
       });
