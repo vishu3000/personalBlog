@@ -116,9 +116,6 @@ const BlogPost = () => {
   const [error, setError] = useState(null);
   const [prevLikes, setPrevLikes] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
-  const [isFixed, setIsFixed] = useState(false);
-  const parentRef = useRef(null);
-  const childRef = useRef(null);
   const [save, isSaved] = useState(false);
 
   const storeComments = useCallback(
@@ -212,25 +209,6 @@ const BlogPost = () => {
     fetchBlog();
   }, [session]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (parentRef.current && childRef.current) {
-        const parentTop = parentRef.current.getBoundingClientRect().top;
-        const parentBottom = parentRef.current.getBoundingClientRect().bottom;
-        const childHeight = childRef.current.offsetHeight;
-
-        if (parentTop <= 0 && parentBottom > childHeight) {
-          setIsFixed(true);
-        } else {
-          setIsFixed(false);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   // Sample related articles data (replace with actual data)
   const relatedArticles = [
     {
@@ -263,95 +241,89 @@ const BlogPost = () => {
       {session && <SocialShareFixed currentPath={currentPath} />}
       <div className="flex justify-center align-middle">
         <div className="flex flex-col md:w-3/4">
-          <article
-            ref={parentRef}
-            className="relative max-w-5xl ml-auto mr-11 px-8 py-8 my-8 border-2 shadow-lg rounded-lg bg-white"
-          >
-            {save && (
-              <div className="absolute top-4 right-4">
-                <FontAwesomeIcon
-                  icon={faBookmark}
-                  size="2xl"
-                  style={{ color: "#583232" }}
-                />
-              </div>
-            )}
-            <AuthorInfo
-              author={blog.author}
-              date={blog.date}
-              readTime={blog.readTime}
-              authorAvatar={blog.authorAvatar}
-            />
-
-            <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
-            <p className="text-gray-600 mb-6">{blog.summary}</p>
-
-            {blog.imageUrl && (
-              <div className="mb-8 flex justify-center">
-                <Image
-                  src={blog.imageUrl}
-                  alt="Blog cover"
-                  width={800}
-                  height={400}
-                  className="rounded-lg"
-                  priority
-                  loading="eager"
-                />
-              </div>
-            )}
-
-            <div className="prose max-w-none">{blog.story}</div>
-
-            {session && (
-              <div className="flex items-center justify-between mt-6">
-                <div className="flex items-center gap-2">
-                  <span>{blog.views?.length || 0} views</span>
-                  <span>•</span>
-                  <span>{commentCount || 0} comments</span>
-                </div>
-                <button
-                  onClick={increaseLikes}
-                  className={`flex items-center gap-2 hover:opacity-75 transition-opacity `}
-                  aria-label="Like post"
-                >
-                  <span>{likes}</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20"
-                    width="20"
-                    viewBox="0 0 512 512"
-                    className="transition-colors"
-                  >
-                    <path
-                      fill={hasLiked ? "#ec096b" : "none"}
-                      stroke={hasLiked ? "none" : "#ec096b"}
-                      strokeWidth="30"
-                      d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            )}
-
-            <div className="flex flex-col space-y-4" ref={childRef}>
+          <div className="flex max-w-6xl ml-auto mr-11 my-8">
+            <div className="flex flex-col space-y-4 mr-8 sticky top-8 self-start">
               <button
                 onClick={highlightSelection}
-                className={`${
-                  isFixed ? "fixed left-64" : "absolute -left-28"
-                } top-8 w-20 h-20 bg-yellow-500 text-white flex items-center justify-center rounded-lg shadow-lg z-10 transition-transform duration-300 transform hover:scale-110 hover:bg-yellow-700 hover:text-brown-700`}
+                className="relative w-20 h-20 bg-yellow-500 text-white flex items-center justify-center rounded-lg shadow-lg z-10 transition-transform duration-300 transform hover:scale-110 hover:bg-yellow-700 hover:text-brown-700"
               >
                 <FontAwesomeIcon icon={faHighlighter} />
               </button>
               <button
                 onClick={saveArticle}
-                className={`${
-                  isFixed ? "fixed left-64" : "absolute -left-28"
-                } top-32 w-20 h-20 bg-blue-500 text-white flex items-center justify-center rounded-lg shadow-lg z-10 transition-transform duration-300 transform hover:scale-110 hover:bg-blue-700 hover:text-brown-700`}
+                className="relative w-20 h-20 bg-blue-500 text-white flex items-center justify-center rounded-lg shadow-lg z-10 transition-transform duration-300 transform hover:scale-110 hover:bg-blue-700 hover:text-brown-700"
               >
                 <FontAwesomeIcon icon={faBookmark} />
               </button>
             </div>
-          </article>
+            <article className="relative px-8 py-8 border-2 shadow-lg rounded-lg bg-white overflow-y-auto">
+              {save && (
+                <div className="absolute top-4 right-4">
+                  <FontAwesomeIcon
+                    icon={faBookmark}
+                    size="2xl"
+                    style={{ color: "#583232" }}
+                  />
+                </div>
+              )}
+              <AuthorInfo
+                author={blog.author}
+                date={blog.date}
+                readTime={blog.readTime}
+                authorAvatar={blog.authorAvatar}
+              />
+
+              <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
+              <p className="text-gray-600 mb-6">{blog.summary}</p>
+
+              {blog.imageUrl && (
+                <div className="mb-8 flex justify-center">
+                  <Image
+                    src={blog.imageUrl}
+                    alt="Blog cover"
+                    width={800}
+                    height={400}
+                    className="rounded-lg"
+                    priority
+                    loading="eager"
+                  />
+                </div>
+              )}
+
+              <div className="prose max-w-none">{blog.story}</div>
+
+              {session && (
+                <div className="flex items-center justify-between mt-6">
+                  <div className="flex items-center gap-2">
+                    <span>{blog.views?.length || 0} views</span>
+                    <span>•</span>
+                    <span>{commentCount || 0} comments</span>
+                  </div>
+                  <button
+                    onClick={increaseLikes}
+                    className={`flex items-center gap-2 hover:opacity-75 transition-opacity `}
+                    aria-label="Like post"
+                  >
+                    <span>{likes}</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="20"
+                      width="20"
+                      viewBox="0 0 512 512"
+                      className="transition-colors"
+                    >
+                      <path
+                        fill={hasLiked ? "#ec096b" : "none"}
+                        stroke={hasLiked ? "none" : "#ec096b"}
+                        strokeWidth="30"
+                        d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </article>
+          </div>
           {session && (
             <div className="relative ml-auto mr-11">
               <CommentSection
