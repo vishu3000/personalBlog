@@ -1,106 +1,21 @@
-import { useRouter } from "next/router";
-import { useState, useEffect, useCallback, useRef } from "react";
-import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faTwitter,
-  faLinkedinIn,
-  faWhatsapp,
-} from "@fortawesome/free-brands-svg-icons";
-import {
-  faLink,
-  faHighlighter,
-  faBookmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { useSession } from "next-auth/react";
+import AuthorInfo from "@/components/AuthorInfo";
+import CommentSection from "@/components/commentSection";
 import NavList from "@/components/NavList";
+import ArticleList from "@/components/RelatedArticles";
+import RhsWidget from "@/components/RhsWidget";
+import SocialShareFixed from "@/components/SocialShare";
 import {
-  copyLink,
   highlightSelection,
   isValidArray,
-  shareOnFacebook,
-  shareOnLinkedIn,
-  shareOnWhatsApp,
-  shareOnX,
   throttle,
   updateFields,
 } from "@/utils/utils";
-import CommentSection from "@/components/commentSection";
-import ArticleList from "@/components/RelatedArticles";
-
-// Separate components for better organization
-const AuthorInfo = ({ author, date, readTime, authorAvatar }) => (
-  <div className="flex items-center gap-3 mb-4">
-    <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
-      <Image
-        src={authorAvatar || "/profilePlaceHolder.jpeg"}
-        alt={`${author}'s avatar`}
-        width={32}
-        height={32}
-      />
-    </div>
-    <div className="flex items-center text-sm text-gray-600">
-      <span>{author}</span>
-      <span className="mx-2">•</span>
-      <span>{date}</span>
-      <span className="mx-2">•</span>
-      <span>{readTime} read</span>
-    </div>
-  </div>
-);
-
-// SocialShare component for the fixed social bar
-const SocialShareFixed = (props) => {
-  const { currentPath } = props;
-  const socialIcons = [
-    {
-      icon: faFacebookF,
-      label: "Share on Facebook",
-      color: "bg-blue-600",
-      callBack: shareOnFacebook,
-    },
-    {
-      icon: faTwitter,
-      label: "Share on Twitter",
-      color: "bg-blue-400",
-      callBack: shareOnX,
-    },
-    {
-      icon: faLink,
-      label: "Copy link",
-      color: "bg-red-500",
-      callBack: copyLink,
-    },
-    {
-      icon: faLinkedinIn,
-      label: "Share on LinkedIn",
-      color: "bg-blue-700",
-      callBack: shareOnLinkedIn,
-    },
-    {
-      icon: faWhatsapp,
-      label: "Share on WhatsApp",
-      color: "bg-green-500",
-      callBack: shareOnWhatsApp,
-    },
-  ];
-
-  return (
-    <div className="fixed left-0 top-1/2 transform -translate-y-1/2 bg-slate-100 shadow-lg rounded-3xl p-4 ml-8">
-      {socialIcons.map(({ icon, label, color, callBack }) => (
-        <button
-          key={label}
-          className={`flex items-center justify-center w-12 h-12 ${color} text-white rounded-full mb-2 transition duration-300 transform hover:scale-110`}
-          aria-label={label}
-          onClick={() => callBack(currentPath)}
-        >
-          <FontAwesomeIcon icon={icon} className="w-5 h-5" />
-        </button>
-      ))}
-    </div>
-  );
-};
+import { faBookmark, faHighlighter } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 
 const BlogPost = () => {
   const router = useRouter();
@@ -112,6 +27,7 @@ const BlogPost = () => {
   const [likes, setLikes] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [label, setLabel] = useState("");
   const [comments, setComments] = useState([]);
   const [error, setError] = useState(null);
   const [prevLikes, setPrevLikes] = useState([]);
@@ -198,6 +114,7 @@ const BlogPost = () => {
         updateViewCount(initialView);
         setComments(data?.comments);
         setCommentCount(data.comments?.length || 0);
+        setLabel(data?.label[0]);
       } catch (error) {
         console.error("Error fetching blog:", error);
         setError(error.message);
@@ -209,81 +126,82 @@ const BlogPost = () => {
     fetchBlog();
   }, [session]);
 
-  // Sample related articles data (replace with actual data)
-  const relatedArticles = [
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-    {
-      id: 1,
-      title: "Understanding React Hooks",
-      summary: "A deep dive into React hooks.",
-      readTime: "5 min",
-    },
-  ];
+  // // Sample related articles data (replace with actual data)
+  // const relatedArticles = [
+  //   {
+  //     id: 1,
+  //     title:
+  //       "Understanding React Hooks Understanding React Hooks Understanding React Hooks Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "Understanding React Hooks",
+  //     summary: "A deep dive into React hooks.",
+  //     readTime: "5 min",
+  //   },
+  // ];
 
   if (isLoading) {
     return (
@@ -400,20 +318,7 @@ const BlogPost = () => {
             </div>
           )}
         </div>
-        {/* Related Articles Section */}
-        <div className="md:w-1/4 ">
-          <div className="flex flex-col sticky top-4">
-            <ArticleList
-              articles={relatedArticles}
-              blogHeading={"Related Blogs"}
-            />
-            <div className="my-4 h-px bg-gray-300" />
-            <ArticleList
-              articles={relatedArticles}
-              blogHeading={"Blogs You Liked.."}
-            />
-          </div>
-        </div>
+        <RhsWidget session={session} blogLabel={label} blogId={blogId} />
       </div>
     </>
   );

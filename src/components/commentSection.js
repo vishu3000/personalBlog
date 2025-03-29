@@ -33,7 +33,7 @@ const CommentSection = (props) => {
     : [];
 
   return (
-    <div className="comment-section">
+    <div className="comment-section min-w-[1038px]">
       <h2>Discussion ({sortedComments?.length || 0})</h2>
       <div className="comment-input">
         <textarea
