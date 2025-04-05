@@ -222,7 +222,7 @@ const BlogPost = () => {
   return (
     <>
       <NavList />
-      {session && <SocialShareFixed currentPath={currentPath} />}
+      <SocialShareFixed currentPath={currentPath} />
       <div className="flex justify-center align-middle">
         <div className="flex flex-col md:w-3/4">
           <div className="flex max-w-6xl ml-auto mr-11 my-8">

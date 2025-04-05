@@ -97,7 +97,7 @@ export const throttle = (func, limit) => {
 };
 
 export function shareOnWhatsApp(path) {
-  const url = process.env.SITE + path; // Replace with your URL
+  const url = process.env.NEXT_PUBLIC_SITE + path; // Replace with your URL
   const text = "Check this out!"; // Customize your message
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
     text + " " + url
@@ -106,7 +106,7 @@ export function shareOnWhatsApp(path) {
 }
 
 export function shareOnX(path) {
-  const url = process.env.SITE + path; // Replace with your URL
+  const url = process.env.NEXT_PUBLIC_SITE + path; // Replace with your URL
   const text = "Check this out!"; // Customize your text
   const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
     url
@@ -115,7 +115,7 @@ export function shareOnX(path) {
 }
 
 export function shareOnLinkedIn(path) {
-  const url = process.env.SITE + path; // Replace with your URL
+  const url = process.env.NEXT_PUBLIC_SITE + path; // Replace with your URL
   const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
     url
   )}`;
@@ -123,7 +123,7 @@ export function shareOnLinkedIn(path) {
 }
 
 export function copyLink(path) {
-  const url = process.env.SITE + path; // Replace with your URL
+  const url = process.env.NEXT_PUBLIC_SITE + path; // Replace with your URL
   if (!url) {
     console.error("No link provided to copy.");
     return;
@@ -140,7 +140,7 @@ export function copyLink(path) {
 }
 
 export function shareOnFacebook(path) {
-  const url = process.env.SITE + path; // Replace with your URL
+  const url = process.env.NEXT_PUBLIC_SITE + path; // Replace with your URL
   const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
     url
   )}`;
