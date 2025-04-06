@@ -29,7 +29,6 @@ const BlogPost = () => {
       },
     };
   }, []);
-
   const { blogId } = router.query;
   const [blog, setBlog] = useState(null);
   const [likes, setLikes] = useState(0);
