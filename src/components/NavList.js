@@ -11,8 +11,11 @@ const NavList = (props) => {
       }`}
     >
       <div className="flex items-center">
-        {/* User Avatar to be added here */}
-        <span className="text-white text-xl font-bold">Logo</span>
+        <img
+          src="/logo.ico"
+          alt="Blog Logo"
+          className="h-10 w-auto rounded-full"
+        />
       </div>
       <div className="flex space-x-8">
         <Link href="/" className="text-white hover:text-gray-300">
@@ -24,7 +27,7 @@ const NavList = (props) => {
         <Link href="/contact" className="text-white hover:text-gray-300">
           Contact
         </Link>
-        <LoginButton/>
+        <LoginButton />
       </div>
     </nav>
   );
