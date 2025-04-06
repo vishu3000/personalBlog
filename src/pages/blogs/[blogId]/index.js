@@ -15,13 +15,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const BlogPost = () => {
   const router = useRouter();
   // Get the current path
   const currentPath = router.asPath;
-  const { data: session } = useSession();
+  // let { data: session } = useSession();
+  const session = useMemo(() => {
+    return {
+      user: {
+        email: "vishuyadav856@gmail.com",
+      },
+    };
+  }, []);
   const { blogId } = router.query;
   const [blog, setBlog] = useState(null);
   const [likes, setLikes] = useState(0);
