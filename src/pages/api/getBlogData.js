@@ -12,8 +12,14 @@ export default async function handler(req, res) {
     if (!id) {
       return res.status(400).json({ message: "Blog ID is required" });
     }
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid blog ID" });
+    }
 
-    const client = new MongoClient(process.env.MONGODB_URI);
+    const client = new MongoClient(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     await client.connect();
 
     // Choose a name for your database
